@@ -68,7 +68,7 @@ run_sp2b() {
             for i in {1..10}
             do
                 START=$(date +%s.%N)
-                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt curl $SPARQL_QUERY_URL --data "query=$QUERY" > /dev/null
+                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt curl $SPARQL_QUERY_URL --data-urlencode "query=$QUERY" > /dev/null
                 END=$(date +%s.%N)
                 DIFF=$(echo "($END - $START) * 1000" | bc)
                 echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
