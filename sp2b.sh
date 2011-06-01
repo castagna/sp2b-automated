@@ -79,3 +79,28 @@ run_sp2b() {
     fi
 }
 
+
+run_sp2b_tdb() {
+    SYSTEM_UNDER_TEST=`echo $1 | tr '[:upper:]' '[:lower:]'`
+
+    RESULT_FILENAME=$SP2B_DATASET_SIZE-$SYSTEM_UNDER_TEST
+    if [ ! -f "$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt" ]; then
+        echo "==== Running SP2B: sut=$SYSTEM_UNDER_TEST, size=$SP2B_DATASET_SIZE ..."
+        echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
+        cd $SP2B_ROOT_PATH/sp2b/queries
+        for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
+        do
+            echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+#            for i in {1..10}
+#            do
+                START=$(date +%s.%N)
+                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt tdbquery --time --quiet --loc /tmp/sp2b/datasets/tdb-10000/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+                END=$(date +%s.%N)
+                DIFF=$(echo "($END - $START) * 1000" | bc)
+                echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+#            done
+        done
+        echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
+    fi
+}
+

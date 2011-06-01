@@ -55,3 +55,14 @@ setup_tdb() {
     fi
 }
 
+
+test_tdb() {
+    if [ ! -f "$SP2B_ROOT_PATH/results/$SP2B_DATASET_SIZE-tdb.txt" ]; then
+        free_os_caches
+        run_sp2b_tdb "tdb"
+    else
+        echo "==== [skipped] Running SP2B: sut=TDB, size=$SP2B_DATASET_SIZE ..."
+    fi
+}
+
+
