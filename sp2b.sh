@@ -91,14 +91,14 @@ run_sp2b_tdb() {
         for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
         do
             echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-#            for i in {1..10}
-#            do
+            for i in {1..10}
+            do
                 START=$(date +%s.%N)
                 /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt tdbquery --time --results none --quiet --loc /tmp/sp2b/datasets/tdb-10000/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
                 END=$(date +%s.%N)
                 DIFF=$(echo "($END - $START) * 1000" | bc)
                 echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-#            done
+            done
         done
         echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
     fi
