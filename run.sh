@@ -18,6 +18,7 @@
 
 ROOT_PATH=`pwd`
 SP2B_ROOT_PATH=/tmp/sp2b
+NUM_WARMUP_QUERY_RUNS=1
 NUM_QUERY_RUNS=3
 
 source common.sh
@@ -36,6 +37,6 @@ do
     generate_sp2b_dataset
     load_tdb
     test_tdb
-    test_fuseki
+#    test_fuseki
 done
 

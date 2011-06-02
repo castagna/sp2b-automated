@@ -25,7 +25,8 @@ load_tdb() {
         echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
         free_os_caches
         export TDBROOT=$SP2B_ROOT_PATH/tdb
-        export PATH=$PATH:$SP2B_ROOT_PATH/tdb/bin:$SP2B_ROOT_PATH/tdb/bin2
+        OLD_PATH=$PATH
+        export PATH=$SP2B_ROOT_PATH/tdb/bin:$SP2B_ROOT_PATH/tdb/bin2:$PATH
         mkdir $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE
         if [ ! -d "$SP2B_ROOT_PATH/results" ]; then
             mkdir $SP2B_ROOT_PATH/results
@@ -34,6 +35,7 @@ load_tdb() {
         tdbstats --loc $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE > $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE/stats.opt
         ls -la $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE > $SP2B_ROOT_PATH/results/tdb-$SP2B_DATASET_SIZE-size.txt
         du -sh $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE >> $SP2B_ROOT_PATH/results/tdb-$SP2B_DATASET_SIZE-size.txt
+        export PATH=$OLD_PATH
         echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
     else
         echo "==== [skipped] Loading data in TDB: scale=$SP2B_DATASET_SIZE ..."
@@ -46,8 +48,17 @@ setup_tdb() {
         echo "==== Checking-out and compiling TDB source code ..."
         echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
         cd $SP2B_ROOT_PATH
+        svn co https://svn.apache.org/repos/asf/incubator/jena/Jena2/ARQ/trunk/ arq
+        cd $SP2B_ROOT_PATH/arq
+        mvn package
+        cd $SP2B_ROOT_PATH
         svn co https://svn.apache.org/repos/asf/incubator/jena/Jena2/TDB/trunk/ tdb
         cd $SP2B_ROOT_PATH/tdb
+        # to make sure we use the latest ARQ SNAPSHOT
+        rm $SP2B_ROOT_PATH/tdb/lib/arq-*
+        rm $SP2B_ROOT_PATH/tdb/lib-src/arq-*
+        cp $SP2B_ROOT_PATH/arq/target/arq-*-SNAPSHOT.jar $SP2B_ROOT_PATH/tdb/lib/
+        cp $SP2B_ROOT_PATH/arq/target/arq-*-SNAPSHOT-sources.jar $SP2B_ROOT_PATH/tdb/lib-src/
         mvn package
         echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
     else
