@@ -68,7 +68,7 @@ setup_tdb() {
 
 
 test_tdb() {
-    if [ ! -f "$SP2B_ROOT_PATH/results/$SP2B_DATASET_SIZE-tdb.txt" ]; then
+    if [ ! -f "$SP2B_ROOT_PATH/results/sp2b-$SP2B_DATASET_SIZE-tdb.txt" ]; then
         free_os_caches
         run_sp2b_tdb "tdb"
     else

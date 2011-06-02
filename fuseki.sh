@@ -60,7 +60,7 @@ shutdown_fuseki() {
 test_fuseki() {
     shutdown_fuseki
 
-    if [ ! -f "$SP2B_ROOT_PATH/results/$SP2B_DATASET_SIZE-fuseki.txt" ]; then
+    if [ ! -f "$SP2B_ROOT_PATH/results/sp2b-$SP2B_DATASET_SIZE-fuseki.txt" ]; then
         run_fuseki
         free_os_caches
         run_sp2b "fuseki" $FUSEKI_SPARQL_QUERY_URL $FUSEKI_SPARQL_UPDATE_URL
