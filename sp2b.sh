@@ -65,7 +65,7 @@ run_sp2b() {
         do
             QUERY=`cat $SP2B_QUERY_FILE.sparql`
             echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-            for i in {1..10}
+            for i in {1..$NUM_QUERY_RUNS}
             do
                 START=$(date +%s.%N)
                 /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt curl $SPARQL_QUERY_URL --data-urlencode "query=$QUERY" > /dev/null
@@ -91,10 +91,10 @@ run_sp2b_tdb() {
         for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
         do
             echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-            for i in {1..10}
+            for i in {1..$NUM_QUERY_RUNS}
             do
                 START=$(date +%s.%N)
-                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt tdbquery --time --results none --quiet --loc /tmp/sp2b/datasets/tdb-10000/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt tdbquery --time --results none --quiet --loc /tmp/sp2b/datasets/tdb-$SP2B_DATASET_SIZE/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
                 END=$(date +%s.%N)
                 DIFF=$(echo "($END - $START) * 1000" | bc)
                 echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt

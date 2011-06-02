@@ -25,7 +25,7 @@ load_tdb() {
         echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
         free_os_caches
         export TDBROOT=$SP2B_ROOT_PATH/tdb
-        export PATH=$PATH:$SP2B_ROOT_PATH/tdb/bin2
+        export PATH=$PATH:$SP2B_ROOT_PATH/tdb/bin:$SP2B_ROOT_PATH/tdb/bin2
         mkdir $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE
         if [ ! -d "$SP2B_ROOT_PATH/results" ]; then
             mkdir $SP2B_ROOT_PATH/results
