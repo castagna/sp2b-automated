@@ -73,7 +73,6 @@ run_sp2b() {
                 DIFF=$(echo "($END - $START) * 1000" | bc)
                 echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
             done
-
         done
         echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
     fi
@@ -101,3 +100,60 @@ run_sp2b_tdb() {
     fi
 }
 
+
+run_sp2b_stardog() {
+    SYSTEM_UNDER_TEST=`echo $1 | tr '[:upper:]' '[:lower:]'`
+
+    RESULT_FILENAME=sp2b-$SP2B_DATASET_SIZE-$SYSTEM_UNDER_TEST
+    if [ ! -f "$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt" ]; then
+        echo "==== Running SP2B: sut=$SYSTEM_UNDER_TEST, size=$SP2B_DATASET_SIZE ..."
+        echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
+        STARDOG_HOME=$SP2B_ROOT_PATH/datasets/stardog-$SP2B_DATASET_SIZE
+        cd $SP2B_ROOT_PATH/sp2b/queries
+        for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
+        do
+            QUERY=`tr '\n' ' ' < $SP2B_QUERY_FILE.sparql`
+            echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+            for i in `seq 1 $NUM_QUERY_RUNS`
+            do
+                START=$(date +%s.%N)
+                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt $STARDOG_INSTALLATION/stardog query --home $STARDOG_HOME -c "native://stardog_$SP2B_DATASET_SIZE" -q "$QUERY" > /dev/null
+                END=$(date +%s.%N)
+                DIFF=$(echo "($END - $START) * 1000" | bc)
+                echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+            done
+        done
+        echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
+    fi
+}
+
+
+run_sp2b_stardog_http() {
+    SYSTEM_UNDER_TEST=`echo $1 | tr '[:upper:]' '[:lower:]'`
+    SPARQL_QUERY_URL=$2
+
+    RESULT_FILENAME=sp2b-$SP2B_DATASET_SIZE-$SYSTEM_UNDER_TEST
+    if [ ! -f "$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt" ]; then
+        echo "==== Running SP2B: sut=$SYSTEM_UNDER_TEST, size=$SP2B_DATASET_SIZE ..."
+        echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
+        cd $SP2B_ROOT_PATH/sp2b/queries
+        for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
+        do
+            QUERY=`cat $SP2B_QUERY_FILE.sparql`
+            echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+            for i in `seq 1 $NUM_WARMUP_QUERY_RUNS`
+            do
+                curl --basic -u"anonymous:anonymous" --get $SPARQL_QUERY_URL --data-urlencode "query=$QUERY" > /dev/null
+            done
+            for i in `seq 1 $NUM_QUERY_RUNS`
+            do
+                START=$(date +%s.%N)
+                /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt curl --basic -u"anonymous:anonymous" --get $SPARQL_QUERY_URL --data-urlencode "query=$QUERY" > /dev/null
+                END=$(date +%s.%N)
+                DIFF=$(echo "($END - $START) * 1000" | bc)
+                echo "$DIFF ms" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+            done
+        done
+        echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
+    fi
+}

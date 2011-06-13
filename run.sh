@@ -21,22 +21,28 @@ SP2B_ROOT_PATH=/tmp/sp2b
 NUM_WARMUP_QUERY_RUNS=1
 NUM_QUERY_RUNS=3
 
+STARDOG_INSTALLATION=/opt/stardog
+
 source common.sh
 source sp2b.sh
 source tdb.sh
 source fuseki.sh
+source stardog.sh
 
 setup_tdb
 setup_sp2b
 setup_fuseki
 
-SP2B_DATASET_SIZES=( 10000 50000 250000 1000000 5000000 25000000 )
+#SP2B_DATASET_SIZES=( 10000 50000 250000 1000000 5000000 25000000 )
+SP2B_DATASET_SIZES=( 10000 50000 250000 )
 
 for SP2B_DATASET_SIZE in ${SP2B_DATASET_SIZES[@]} 
 do
     generate_sp2b_dataset
+    load_stardog
+    test_stardog_http
     load_tdb
     test_tdb
-#    test_fuseki
+    test_fuseki
 done
 
