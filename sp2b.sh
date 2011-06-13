@@ -65,7 +65,7 @@ run_sp2b() {
         do
             QUERY=`cat $SP2B_QUERY_FILE.sparql`
             echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-            for i in {1..$NUM_QUERY_RUNS}
+            for i in `seq 1 $NUM_QUERY_RUNS`
             do
                 START=$(date +%s.%N)
                 /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt curl $SPARQL_QUERY_URL --data-urlencode "query=$QUERY" > /dev/null
@@ -91,7 +91,7 @@ run_sp2b_tdb() {
         for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
         do
             echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-            for i in {1..$NUM_QUERY_RUNS}
+            for i in `seq 1 $NUM_QUERY_RUNS`
             do
                 START=$(date +%s.%N)
                 /usr/bin/time -f "%E real, %U user, %S sys" -a --output=$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt tdbquery --time --results none --quiet --loc /tmp/sp2b/datasets/tdb-$SP2B_DATASET_SIZE/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt

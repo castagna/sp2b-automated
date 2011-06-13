@@ -24,7 +24,7 @@ systems_under_test = sorted(systems_under_test)
 
 
 right_margin = 12
-width = 5
+width = 9
 
 for size in sizes:
     for system_under_test in systems_under_test:
