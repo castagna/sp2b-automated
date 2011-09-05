@@ -16,7 +16,7 @@
 # limitations under the License.
 ##
 
-ROOT_PATH=`pwd`
+ROOT_PATH="$( cd -P "$( dirname "$0" )" && pwd )"
 SP2B_ROOT_PATH=/tmp/sp2b
 NUM_WARMUP_QUERY_RUNS=1
 NUM_QUERY_RUNS=3
@@ -46,3 +46,5 @@ do
 #    test_fuseki
 done
 
+echo "==== Results:"
+$ROOT_PATH/report.py $SP2B_ROOT_PATH/results/
