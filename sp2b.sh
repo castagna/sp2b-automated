@@ -94,7 +94,7 @@ run_sp2b_tdb() {
         for SP2B_QUERY_FILE in ${SP2B_QUERY_FILES[@]} 
         do
             echo -e "\n$SP2B_QUERY_FILE.sparql" >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
-            tdbquery --time --results=count --repeat=$NUM_WARMUP_QUERY_RUNS,$NUM_QUERY_RUNS --quiet --loc $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
+            $SP2B_ROOT_PATH/tdb/bin/tdbquery --time --results=count --repeat=$NUM_WARMUP_QUERY_RUNS,$NUM_QUERY_RUNS --quiet --loc $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql &>> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
         done
         export PATH=$OLD_PATH
         export TDBROOT=$OLD_TDBROOT

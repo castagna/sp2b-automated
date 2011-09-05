@@ -24,6 +24,7 @@ load_tdb() {
         echo "==== Loading data in TDB: scale=$SP2B_DATASET_SIZE ..."
         echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
         free_os_caches
+        OLD_TDBROOT=$TDBROOT
         export TDBROOT=$SP2B_ROOT_PATH/tdb
         OLD_PATH=$PATH
         export PATH=$SP2B_ROOT_PATH/tdb/bin:$SP2B_ROOT_PATH/tdb/bin2:$PATH
@@ -36,6 +37,7 @@ load_tdb() {
         ls -la $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE > $SP2B_ROOT_PATH/results/tdb-$SP2B_DATASET_SIZE-size.txt
         du -sh $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE >> $SP2B_ROOT_PATH/results/tdb-$SP2B_DATASET_SIZE-size.txt
         export PATH=$OLD_PATH
+        export TDBROOT=$OLD_TDBROOT
         echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
     else
         echo "==== [skipped] Loading data in TDB: scale=$SP2B_DATASET_SIZE ..."
