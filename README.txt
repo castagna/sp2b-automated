@@ -11,13 +11,16 @@ interesting than results for a single system.
 
 You can simply run the bash script typing:
 
-  ./sp2b.sh 
+  ./run.sh 
 
 You need bash, Java, Ant, Maven, SVN, wget, etc., and I am not going to explain 
 how to install/configure those. The script downloads all the necessary software 
 pieces, it sets them up, it uses the SP2B to generate a test dataset and it 
 runs the benchmark for you against Fuseki/TDB.
 Once finished, you can find the results in the /tmp/sp2b/results/ directory.
+If you want to change the output directory edit the run.sh file and change
+the value of the SP2B_ROOT_PATH=/tmp/sp2b variable. It must be an absolute
+path.
 
 I am not a bash "guru", I warned you! You can insult me or send me suggestion
 how to improve the scripts. Suggestions are more welcome than insults. ;-)
