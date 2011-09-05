@@ -86,6 +86,7 @@ run_sp2b_tdb() {
     if [ ! -f "$SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt" ]; then
         echo "==== Running SP2B: sut=$SYSTEM_UNDER_TEST, size=$SP2B_DATASET_SIZE ..."
         echo "== Start: $(date +"%Y-%m-%d %H:%M:%S")"
+        OLD_TDBROOT=$TDBROOT
         export TDBROOT=$SP2B_ROOT_PATH/tdb
         OLD_PATH=$PATH
         export PATH=$SP2B_ROOT_PATH/tdb/bin:$SP2B_ROOT_PATH/tdb/bin2:$PATH
@@ -96,6 +97,7 @@ run_sp2b_tdb() {
             tdbquery --time --results=count --repeat=$NUM_WARMUP_QUERY_RUNS,$NUM_QUERY_RUNS --quiet --loc $SP2B_ROOT_PATH/datasets/tdb-$SP2B_DATASET_SIZE/ --query $SP2B_ROOT_PATH/sp2b/queries/$SP2B_QUERY_FILE.sparql >> $SP2B_ROOT_PATH/results/$RESULT_FILENAME.txt
         done
         export PATH=$OLD_PATH
+        export TDBROOT=$OLD_TDBROOT
         echo "== Finish: $(date +"%Y-%m-%d %H:%M:%S")"
     fi
 }
