@@ -17,7 +17,12 @@ You need bash, Java, Ant, Maven, SVN, wget, etc., and I am not going to explain
 how to install/configure those. The script downloads all the necessary software 
 pieces, it sets them up, it uses the SP2B to generate a test dataset and it 
 runs the benchmark for you against Fuseki/TDB.
+
 Once finished, you can find the results in the /tmp/sp2b/results/ directory.
+If you have you can use a simply Python script to pretty print the results:
+
+  ./report.py /tmp/sp2b/results/
+
 If you want to change the output directory edit the run.sh file and change
 the value of the SP2B_ROOT_PATH=/tmp/sp2b variable. It must be an absolute
 path.
